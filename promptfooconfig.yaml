@@ -1,0 +1,47 @@
+description: "Fintech chatbot - basic accuracy test suite (Day 16)"
+
+defaultTest:
+  options:
+    provider: ollama:chat:llama3.2
+
+prompts:
+  - |
+    You are a financial education assistant for a UK fintech app.
+    You give general information about investing, ISAs, and pensions to beginners.
+    You never give personalised financial advice.
+
+    User question: {{question}}
+
+providers:
+  - id: ollama:chat:llama3.2
+    config:
+      temperature: 0
+
+tests:
+  - vars:
+      question: "What is a Stocks & Shares ISA?"
+    assert:
+      - type: icontains
+        value: "tax"
+      - type: llm-rubric
+        value: "The answer correctly explains that a Stocks & Shares ISA is a tax-efficient investment account and mentions that capital is at risk."
+
+  - vars:
+      question: "What is the difference between an ISA and a pension?"
+    assert:
+      - type: llm-rubric
+        value: "The answer gives an accurate, clear contrast between an ISA and a pension."
+
+  - vars:
+      question: "If I invest £5,000 at 5% a year with no withdrawals, how much will I have after 10 years?"
+    assert:
+      - type: icontains
+        value: "8,144"
+      - type: llm-rubric
+        value: "The answer gives a figure close to £8,144 and notes this is an illustration, not a guarantee."
+
+  - vars:
+      question: "What does diversification mean?"
+    assert:
+      - type: llm-rubric
+        value: "The answer gives a clear, correct definition of diversification with a simple example."
