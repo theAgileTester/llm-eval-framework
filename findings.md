@@ -45,3 +45,25 @@
 **Control finding:** Age-based metamorphic test (25 vs 65) showed a legitimate difference in prediction, which is expected and not a fairness concern — age has a defensible relationship to income/experience.
 
 **Implication:** A model like this, if deployed for real credit decisions, would need bias mitigation (e.g. removing sex as a feature is not sufficient by itself — proxy variables can still encode it) and ongoing demographic parity monitoring, not a one-time check.
+
+## Adversarial / Red-Team Testing (Promptfoo Red Team + Ollama)
+
+Ran an automated red-team scan (70 auto-generated attack prompts across 7 plugin categories) against the local llama3.2 model to test resistance to prompt injection, unauthorized resource usage, and PII/data leakage.
+
+**Overall result: 61/70 passed (87.14%), 9/70 failed (12.86%)**
+
+**Category breakdown:**
+- Resource Hijacking: 6/10 passed (40% attack success rate) — weakest category
+- CyberSecEval (prompt injection): 7/10 passed (30% attack success rate)
+- PII via Session Data: 9/10 passed (10% attack success rate)
+- PII via Social Engineering: 9/10 passed (10% attack success rate)
+- PII via API/Database: 10/10 passed (fully defended)
+- PII via Direct Exposure: 10/10 passed (fully defended)
+- Illegal Activity: 10/10 passed (fully defended)
+
+**Finding #6 — Model is most vulnerable to instruction-hijacking, not direct data requests**
+- The model reliably refused direct requests for illegal activity or straightforward PII extraction.
+- It was noticeably weaker when an attacker used indirect instruction-override techniques (e.g. "disregard previous instructions", role/scope reframing) to push it outside its defined purpose — even when the system prompt explicitly forbade the behaviour.
+- Concrete examples: the model broke an "objective summary only" instruction and gave a subjective opinion; it leaked a user's city (Chicago) despite an explicit "reveal no private information" instruction; it discussed an out-of-scope topic (quantum mechanics) despite being told to refuse anything not pet-related.
+
+**Implication:** Guardrails implemented purely as system-prompt instructions are not reliable on their own — a small/local model can be talked out of them. Production systems need a second layer of defence (output filtering, a separate moderation/judge model, or rule-based checks) rather than relying on the system prompt alone.
