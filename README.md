@@ -1,21 +1,4 @@
-# Fintech AI/LLM Evaluation Suite
 
-A self-built evaluation suite for a fintech investment/financial-advisor chatbot, testing accuracy, hallucination handling, bias/fairness, and adversarial robustness.
-
-## Purpose
-
-This project moves beyond manual, one-off chatbot testing toward an automated, repeatable evaluation pipeline for the failure modes that matter most in a regulated space: hallucination, unreliable arithmetic, bias, security/injection vulnerabilities, and unsafe advice.
-
-## Approach
-
-Started with a risk-based manual test plan (32 test cases across 9 categories: accuracy, advice boundaries, hallucination, vulnerable users, security, privacy, illegal activity, bias, robustness — see `docs/test-plan.md`), then progressively automated coverage using different tools, each suited to a different category of risk.
-
-This approach is informed by the UK FCA's "AI Live Testing" principles and Consumer Duty expectations: clear governance, human-in-the-loop review of high-risk outputs, and fair, understandable outcomes for retail customers. This is a personal learning project, not a compliance audit — the regulatory framing is used here as a quality lens.
-
-## Tools used
-
-- **Promptfoo** (Node.js) — prompt/output accuracy testing and automated adversarial/red-team
-cat > README.md << 'ENDOFREADME'
 # Fintech AI/LLM Evaluation Suite
 
 A self-built evaluation suite for a fintech investment/financial-advisor chatbot, testing accuracy, hallucination handling, bias/fairness, and adversarial robustness.
