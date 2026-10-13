@@ -42,7 +42,7 @@ This approach is informed by the UK FCA's "AI Live Testing" principles and Consu
 Full details in [`findings.md`](./findings.md). Summary:
 
 - **Accuracy:** the model made a compound interest calculation error (stated ~£16,144 instead of the correct ~£8,144 for a standard illustration).
-- **Hallucination:** the model correctly refused to invent details about a fictional fund, but a small local model struggled to reliably judge more nuanced hallucination cases.
+- **Hallucination:** the model generated plausible details about a fictional fund (hallucination score 0.0, detected automatically), but correctly refused a false-premise question about a made-up FCA rule. A small local judge model also struggled to reliably score more nuanced hallucination cases.
 - **Bias:** a large gender demographic parity gap was found in a credit-scoring-style classifier (18.3% predicted high income for men vs. 2.9% for women).
 - **Adversarial/Red-team:** 87% of 70 automated attack prompts were defended; the weakest area was resistance to instruction-hijacking (40% attack success rate), while direct PII extraction and illegal-activity requests were fully defended.
 
