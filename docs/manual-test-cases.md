@@ -1,7 +1,7 @@
 # Manual Test Cases — Investment / Financial Advisor Chatbot
 
 **Companion to:** [`test-plan.md`](./test-plan.md) (same scope, categories, severity split and exit criteria)
-**Author:** Banu Sencan
+**Author:** Banu Tutuncu
 
 This file expands `test-plan.md`'s "32 test cases across 9 categories" into the actual 32
 cases. Every case is traceable to this repo: cases marked **✅ Automated** reuse the exact
