@@ -1,7 +1,7 @@
 # Project Summary: Fintech AI/LLM Evaluation Suite
 
 **Repo:** github.com/theAgileTester/llm-eval-framework
-**Author:** Banu Sencan
+**Author:** Banu Tutuncu
 
 ## 1. What this project is
 
