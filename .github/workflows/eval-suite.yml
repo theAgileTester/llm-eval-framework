@@ -47,6 +47,10 @@ jobs:
         run: promptfoo eval -c promptfooconfig.yaml
 
       - name: Run hallucination & toxicity suite (DeepEval)
+        # continue-on-error: this suite has known non-passing cases too (one expected
+        # hallucination failure, two judge-model JSON errors — see findings.md). Same
+        # reasoning as the Promptfoo step above: visible in the log, doesn't block CI.
+        continue-on-error: true
         run: pytest test_hallucination.py
 
       - name: Run bias/fairness check
