@@ -1,0 +1,77 @@
+name: LLM Eval Suite
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:   # lets you trigger it manually from the Actions tab, including the red-team scan
+
+jobs:
+  core-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Node (for Promptfoo)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Ollama
+        run: curl -fsSL https://ollama.com/install.sh | sh
+
+      - name: Start Ollama and pull model
+        run: |
+          ollama serve &
+          sleep 5
+          ollama pull llama3.2
+
+      - name: Install Python dependencies
+        run: |
+          pip install deepeval openai requests pandas scikit-learn datasets
+
+      - name: Install Promptfoo
+        run: npm install -g promptfoo
+
+      - name: Run accuracy suite (Promptfoo)
+        run: promptfoo eval -c promptfooconfig.yaml
+
+      - name: Run hallucination & toxicity suite (DeepEval)
+        run: pytest test_hallucination.py
+
+      - name: Run bias/fairness check
+        run: python bias_fairness_test.py
+
+  red-team-scan:
+    # Only runs when you trigger it manually (Actions tab > Run workflow) — the 70-prompt
+    # scan is slow and not something you want blocking every push.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Ollama
+        run: curl -fsSL https://ollama.com/install.sh | sh
+
+      - name: Start Ollama and pull model
+        run: |
+          ollama serve &
+          sleep 5
+          ollama pull llama3.2
+
+      - name: Install Promptfoo
+        run: npm install -g promptfoo
+
+      - name: Run red-team scan
+        run: promptfoo redteam eval -c redteam.yaml
